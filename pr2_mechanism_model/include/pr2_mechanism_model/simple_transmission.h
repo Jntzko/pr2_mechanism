@@ -38,42 +38,42 @@
 #define SIMPLE_TRANSMISSION_H
 
 #include <tinyxml.h>
-#include "pr2_mechanism_model/transmission.h"
+#include "ros_ethercat_model/transmission.h"
 #include "pr2_mechanism_model/joint.h"
 #include "pr2_hardware_interface/hardware_interface.h"
 #include "pr2_mechanism_model/joint_calibration_simulator.h"
 
 namespace pr2_mechanism_model {
 
-class SimpleTransmission : public Transmission
+class SimpleTransmission : public ros_ethercat_model::Transmission
 {
 public:
-  SimpleTransmission() {use_simulated_actuated_joint_=false;}
-  ~SimpleTransmission() {}
+  ~SimpleTransmission()
+  {
+    ROS_DEBUG_STREAM("Destroying simple transmission");
+  }
 
-  bool initXml(TiXmlElement *config, Robot *robot);
-  bool initXml(TiXmlElement *config);
+  bool initXml(TiXmlElement *config, ros_ethercat_model::RobotState *robot);
+  //bool initXml(TiXmlElement *config);
 
   double mechanical_reduction_;
 
-  void propagatePosition(std::vector<pr2_hardware_interface::Actuator*>&,
-                         std::vector<pr2_mechanism_model::JointState*>&);
+  void propagatePosition();
   void propagatePositionBackwards(std::vector<pr2_mechanism_model::JointState*>&,
                                   std::vector<pr2_hardware_interface::Actuator*>&);
-  void propagateEffort(std::vector<pr2_mechanism_model::JointState*>&,
-                       std::vector<pr2_hardware_interface::Actuator*>&);
+  void propagateEffort();
   void propagateEffortBackwards(std::vector<pr2_hardware_interface::Actuator*>&,
                                 std::vector<pr2_mechanism_model::JointState*>&);
 
 private:
   // if a actuated_joint is specified, apply torque based on simulated_reduction_
-  double simulated_reduction_;
-  bool use_simulated_actuated_joint_;
+ /* bool use_simulated_actuated_joint_;
 
   int simulated_actuator_timestamp_initialized_;
   ros::Time simulated_actuator_start_time_;
 
   JointCalibrationSimulator joint_calibration_simulator_;
+*/
 };
 
 } // namespace pr2_mechanism_model
